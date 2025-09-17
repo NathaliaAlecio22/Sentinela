@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinela - Detalhes da Árvore</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #F8F5EF;
+            color: #525252;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #E6E1D9;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .form-group {
+            flex: 1 1 calc(50% - 20px);
+            display: flex;
+            flex-direction: column;
+        }
+        .full-width {
+            flex: 1 1 100%;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #C4B9AA;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        input[type="checkbox"] {
+            width: auto;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .maintenance-history {
+            margin-top: 30px;
+        }
+        .maintenance-history table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .maintenance-history th, .maintenance-history td {
+            border: 1px solid #C4B9AA;
+            padding: 10px;
+            text-align: left;
+        }
+        .maintenance-history th {
+            background-color: #D9D2C7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Detalhes da Árvore</h1>
+    <p style="text-align: center;">Código QR: <strong><span id="codigoQr-display"></span></strong></p>
+    <form id="arvore-form">
+        <div class="form-group">
+            <label for="nomePopular">Nome Popular:</label>
+            <input type="text" id="nomePopular" name="nomePopular" readonly>
+        </div>
+        <div class="form-group">
+            <label for="nomeCientifico">Nome Científico:</label>
+            <input type="text" id="nomeCientifico" name="nomeCientifico" readonly>
+        </div>
+        <div class="form-group">
+            <label for="numeroPlaqueta">Número da Plaqueta:</label>
+            <input type="text" id="numeroPlaqueta" name="numeroPlaqueta" readonly>
+        </div>
+        <div class="form-group">
+            <label for="localizacao">Localização:</label>
+            <input type="text" id="localizacao" name="localizacao" readonly>
+        </div>
+        <div class="form-group">
+            <label for="alturaM">Altura (m):</label>
+            <input type="number" id="alturaM" name="alturaM" readonly>
+        </div>
+        <div class="form-group">
+            <label for="dapCm">DAP (cm):</label>
+            <input type="number" id="dapCm" name="dapCm" readonly>
+        </div>
+        <div class="form-group">
+            <label for="idadeEstimada">Idade Estimada:</label>
+            <input type="number" id="idadeEstimada" name="idadeEstimada" readonly>
+        </div>
+        <div class="form-group">
+            <label for="inclinacaoTronco">Inclinação do Tronco:</label>
+            <input type="text" id="inclinacaoTronco" name="inclinacaoTronco" readonly>
+        </div>
+        <div class="form-group">
+            <label for="raizesExpostas">Raízes Expostas:</label>
+            <input type="checkbox" id="raizesExpostas" name="raizesExpostas" readonly>
+        </div>
+        <div class="form-group">
+            <label for="formaCopa">Forma da Copa:</label>
+            <input type="text" id="formaCopa" name="formaCopa" readonly>
+        </div>
+        <div class="form-group">
+            <label for="pragasDoencas">Pragas/Doenças:</label>
+            <textarea id="pragasDoencas" name="pragasDoencas" rows="2" readonly></textarea>
+        </div>
+        <div class="form-group">
+            <label for="ocoTronco">Oco no Tronco:</label>
+            <input type="text" id="ocoTronco" name="ocoTronco" readonly>
+        </div>
+        <div class="form-group">
+            <label for="rachadurasFissuras">Rachaduras/Fissuras:</label>
+            <textarea id="rachadurasFissuras" name="rachadurasFissuras" rows="2" readonly></textarea>
+        </div>
+        <div class="form-group">
+            <label for="riscoGalhos">Risco de Queda de Galhos:</label>
+            <textarea id="riscoGalhos" name="riscoGalhos" rows="2" readonly></textarea>
+        </div>
+        <div class="form-group">
+            <label for="proximidadeRisco">Proximidade de Risco:</label>
+            <input type="text" id="proximidadeRisco" name="proximidadeRisco" readonly>
+        </div>
+        <div class="form-group">
+            <label for="avaliacaoRisco">Avaliação de Risco:</label>
+            <input type="text" id="observacoesAdicionais" name="avaliacaoRisco" readonly>
+        </div>
+        
+        <div class="form-group full-width">
+            <label for="observacoesAdicionais">Observações Adicionais:</label>
+            <textarea id="observacoesAdicionais" name="observacoesAdicionais" rows="3" readonly></textarea>
+        </div>
+        <div class="form-group">
+            <label for="situacaoRecomendada">Situação Recomendada:</label>
+            <input type="text" id="situacaoRecomendada" name="situacaoRecomendada" readonly>
+        </div>
+    </form>
+
+    <div class="maintenance-history">
+        <h2>Histórico de Manutenções</h2>
+        <table id="tabela-manutencoes">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Data</th>
+                    <th>Descrição</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const arvoresApiUrl = 'http://localhost:8081/ArborismoBackend/api/arvores';
+    const manutencoesApiUrl = 'http://localhost:8081/ArborismoBackend/api/manutencoes';
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const codigoQr = urlParams.get('codigo_qr');
+    
+    if (!codigoQr) {
+        alert('Código QR não fornecido na URL.');
+        window.location.href = 'projetos.html';
+    }
+
+    function carregarDetalhesArvore() {
+        document.getElementById('codigoQr-display').textContent = codigoQr;
+        
+        fetch(`${arvoresApiUrl}/qrcode/${codigoQr}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Árvore não encontrada.');
+            }
+            return response.json();
+        })
+        .then(arvore => {
+        	console.log(arvore);
+            document.getElementById('nomePopular').value = arvore.nomePopular;
+            document.getElementById('nomeCientifico').value = arvore.nomeCientifico;
+            document.getElementById('numeroPlaqueta').value = arvore.numeroPlaqueta;
+            document.getElementById('localizacao').value = arvore.localizacao;
+            document.getElementById('alturaM').value = arvore.alturaM;
+            document.getElementById('dapCm').value = arvore.dapCm;
+            document.getElementById('idadeEstimada').value = arvore.idadeEstimada;
+            document.getElementById('inclinacaoTronco').value = arvore.inclinacaoTronco;
+            document.getElementById('raizesExpostas').checked = arvore.raizesExpostas;
+            document.getElementById('formaCopa').value = arvore.formaCopa;
+            document.getElementById('pragasDoencas').value = arvore.pragasDoencas;
+            document.getElementById('ocoTronco').value = arvore.ocoTronco;
+            document.getElementById('rachadurasFissuras').value = arvore.rachadurasFissuras;
+            document.getElementById('riscoGalhos').value = arvore.riscoGalhos;
+            document.getElementById('proximidadeRisco').value = arvore.proximidadeRisco;
+            document.getElementById('avaliacaoRisco').value = arvore.avaliacaoRisco;
+            document.getElementById('observacoesAdicionais').value = arvore.observacoesAdicionais;
+            document.getElementById('situacaoRecomendada').value = arvore.situacaoRecomendada;
+           
+            // Carrega o histórico de manutenções
+            carregarHistoricoManutencoes(arvore.id);
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert(error.message);
+            window.location.href = 'projetos.html';
+        });
+    }
+    
+    
+    
+    function carregarHistoricoManutencoes(arvoreId) {
+        fetch(`${manutencoesApiUrl}?arvoreId=${arvoreId}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(manutencoes => {
+            const tabelaManutencoesBody = document.querySelector('#tabela-manutencoes tbody');
+            tabelaManutencoesBody.innerHTML = '';
+            manutencoes.forEach(manutencao => {
+                const row = tabelaManutencoesBody.insertRow();
+                row.insertCell(0).textContent = manutencao.tipo;
+                row.insertCell(1).textContent = manutencao.dataEvento;
+                row.insertCell(2).textContent = manutencao.descricao;
+            });
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', carregarDetalhesArvore);
+</script>
+</body>
+</html>

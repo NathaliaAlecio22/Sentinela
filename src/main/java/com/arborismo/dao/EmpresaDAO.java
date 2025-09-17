@@ -52,6 +52,55 @@ public class EmpresaDAO {
         }
     }
     
+ // ... seu código anterior ...
+
+    public Empresa buscarPorCnpj(String cnpj) {
+        String sql = "SELECT * FROM Empresas WHERE cnpj = ?";
+        Empresa empresa = null;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, cnpj);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    empresa = new Empresa();
+                    // Preenche o objeto Empresa com os dados do ResultSet
+                    empresa.setId(rs.getInt("id"));
+                    empresa.setRazaoSocial(rs.getString("razao_social"));
+                    empresa.setNomeFantasia(rs.getString("nome_fantasia"));
+                    empresa.setCnpj(rs.getString("cnpj"));
+                    empresa.setInscricaoEstadual(rs.getString("inscricao_estadual"));
+                    empresa.setRamoAtividade(rs.getString("ramo_atividade"));
+                    empresa.setLogradouro(rs.getString("logradouro"));
+                    empresa.setNumero(rs.getString("numero"));
+                    empresa.setCidade(rs.getString("cidade"));
+                    empresa.setEstado(rs.getString("estado"));
+                    empresa.setCep(rs.getString("cep"));
+                    empresa.setTelefone(rs.getString("telefone"));
+                    empresa.setCelular(rs.getString("celular"));
+                    empresa.setEmailPrincipal(rs.getString("email_principal"));
+                    empresa.setSenha(rs.getString("senha"));
+                    empresa.setSite(rs.getString("site"));
+                    empresa.setNomeResponsavel(rs.getString("nome_responsavel"));
+                    empresa.setCargoResponsavel(rs.getString("cargo_responsavel"));
+                    empresa.setEmailResponsavel(rs.getString("email_responsavel"));
+                    empresa.setFuncionariosCampo(rs.getInt("funcionarios_campo"));
+                    empresa.setCertificacoes(rs.getString("certificacoes"));
+                    empresa.setEquipamentos(rs.getString("equipamentos"));
+                    empresa.setAreaCobertura(rs.getString("area_cobertura"));
+                    empresa.setParcerias(rs.getString("parcerias"));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar empresa por CNPJ: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return empresa;
+    }
+    
     // ---MÉTODO PARA LOGIN ---
     public Empresa buscarPorEmail(String email) {
         String sql = "SELECT * FROM Empresas WHERE email_principal = ?";

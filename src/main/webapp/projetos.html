@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinela - Projetos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F8F5EF;
+            color: #525252;
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #E6E1D9;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h1 {
+            font-size: 1.8em;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .sidebar .project-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            background-color: #C4B9AA;
+            border-radius: 5px;
+            padding-right: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .sidebar .project-item:hover {
+            background-color: #A39688;
+        }
+        .sidebar .nav-link {
+            flex-grow: 1;
+            padding: 10px;
+            text-decoration: none;
+            color: #525252;
+            font-size: 1.1em;
+            border-radius: 5px;
+            transition: color 0.3s ease;
+        }
+        .sidebar .nav-link:hover {
+            color: white;
+        }
+        .project-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .project-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #525252;
+            transition: color 0.3s ease;
+        }
+        .project-actions button:hover {
+            color: #333;
+        }
+        .add-project-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #93A086;
+            cursor: pointer;
+            margin-left: auto;
+            display: block;
+        }
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        .main-content h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .main-content .project-details, .main-content .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .main-content .project-details h3, .main-content .form-container h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .main-content .tree-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        .main-content .btn-add-arvore {
+            padding: 10px 20px;
+            background-color: #93A086;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .main-content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .main-content th, .main-content td {
+            border: 1px solid #C4B9AA;
+            padding: 10px;
+            text-align: left;
+        }
+        .main-content th {
+            background-color: #D9D2C7;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #C4B9AA;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .form-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .form-container button[type="submit"] {
+            background-color: #93A086;
+            color: white;
+        }
+        .form-container button[type="submit"]:hover {
+            background-color: #79856F;
+        }
+        .form-container #btn-cancelar {
+            background-color: #C4B9AA;
+            color: #525252;
+        }
+        .form-container #btn-cancelar:hover {
+            background-color: #B2A799;
+        }
+        .btn-editar, .btn-excluir {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-right: 5px;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .btn-editar {
+            background-color: #0275d8;
+        }
+        .btn-editar:hover {
+            background-color: #025aa5;
+        }
+        .btn-excluir {
+            background-color: #d9534f;
+        }
+        .btn-excluir:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h1>Sentinela</h1>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-size: 1.1em;">Meus Projetos</span>
+        <button id="btn-add-projeto" class="add-project-btn">+</button>
+    </div>
+    <div id="project-list">
+        </div>
+</div>
+
+<div class="main-content">
+    <h2 id="main-title">Selecione um Projeto</h2>
+    <div id="main-area">
+        </div>
+</div>
+
+<script>
+	const projetosApiUrl = 'http://localhost:8081/ArborismoBackend/api/projetos';
+	const arvoresApiUrl = 'http://localhost:8081/ArborismoBackend/api/arvores';
+    const projectListDiv = document.getElementById('project-list');
+    const mainAreaDiv = document.getElementById('main-area');
+    const mainTitle = document.getElementById('main-title');
+    const btnAddProjeto = document.getElementById('btn-add-projeto');
+
+    const token = localStorage.getItem('auth-token');
+    const empresaIdStr = localStorage.getItem('empresaId');
+    const empresaId = parseInt(empresaIdStr);
+
+    if (!token || isNaN(empresaId)) {
+        alert('Você precisa estar logado para acessar esta página.');
+        window.location.href = 'index.html';
+    }
+
+    function carregarProjetos() {
+        fetch(`${projetosApiUrl}?empresaId=${empresaId}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(projetos => {
+            projectListDiv.innerHTML = '';
+            projetos.forEach(projeto => {
+                const projectItem = document.createElement('div');
+                projectItem.className = 'project-item';
+                projectItem.innerHTML = `
+                    <a href="#" class="nav-link">${projeto.nomeProjeto}</a>
+                    <div class="project-actions">
+                        <button class="edit-project-btn" data-project-id="${projeto.id}">✏️</button>
+                        <button class="delete-project-btn" data-project-id="${projeto.id}">🗑️</button>
+                    </div>
+                `;
+                
+                projectItem.querySelector('.nav-link').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    exibirDetalhesProjeto(projeto);
+                });
+
+                projectItem.querySelector('.edit-project-btn').addEventListener('click', () => {
+                    exibirFormularioEditarProjeto(projeto);
+                });
+
+                projectItem.querySelector('.delete-project-btn').addEventListener('click', () => {
+                    excluirProjeto(projeto.id);
+                });
+
+                projectListDiv.appendChild(projectItem);
+            });
+        });
+    }
+
+    function exibirFormularioNovoProjeto() {
+        mainTitle.textContent = 'Novo Projeto';
+        mainAreaDiv.innerHTML = `
+            <div class="form-container">
+                <h3>Criar Novo Projeto</h3>
+                <form id="form-novo-projeto">
+                    <div class="form-group">
+                        <label for="nomeProjeto">Nome do Projeto:</label>
+                        <input type="text" id="nomeProjeto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricaoProjeto">Descrição:</label>
+                        <textarea id="descricaoProjeto" rows="4"></textarea>
+                    </div>
+                    <button type="submit">Salvar Projeto</button>
+                    <button type="button" id="btn-cancelar">Cancelar</button>
+                </form>
+            </div>
+        `;
+
+        document.getElementById('form-novo-projeto').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nomeProjeto = document.getElementById('nomeProjeto').value;
+            const descricaoProjeto = document.getElementById('descricaoProjeto').value;
+
+            const novoProjeto = {
+                nomeProjeto: nomeProjeto,
+                descricaoProjeto: descricaoProjeto,
+                empresaId: empresaId
+            };
+            
+            fetch(projetosApiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(novoProjeto)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Falha ao adicionar projeto.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Projeto adicionado com sucesso!');
+                carregarProjetos();
+                mainTitle.textContent = 'Selecione um Projeto';
+                mainAreaDiv.innerHTML = '';
+            })
+            .catch(error => {
+                alert('Erro: ' + error.message);
+            });
+        });
+
+        document.getElementById('btn-cancelar').addEventListener('click', () => {
+            mainTitle.textContent = 'Selecione um Projeto';
+            mainAreaDiv.innerHTML = '';
+        });
+    }
+
+    function exibirFormularioEditarProjeto(projeto) {
+        mainTitle.textContent = `Editar Projeto: ${projeto.nomeProjeto}`;
+        mainAreaDiv.innerHTML = `
+            <div class="form-container">
+                <h3>Editar Projeto</h3>
+                <form id="form-editar-projeto">
+                    <input type="hidden" id="projetoId" value="${projeto.id}">
+                    <div class="form-group">
+                        <label for="nomeProjeto">Nome do Projeto:</label>
+                        <input type="text" id="nomeProjeto" value="${projeto.nomeProjeto}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricaoProjeto">Descrição:</label>
+                        <textarea id="descricaoProjeto" rows="4">${projeto.descricaoProjeto}</textarea>
+                    </div>
+                    <button type="submit">Salvar Alterações</button>
+                    <button type="button" id="btn-cancelar">Cancelar</button>
+                </form>
+            </div>
+        `;
+
+        document.getElementById('form-editar-projeto').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const projetoId = document.getElementById('projetoId').value;
+            const nomeProjeto = document.getElementById('nomeProjeto').value;
+            const descricaoProjeto = document.getElementById('descricaoProjeto').value;
+
+            const projetoAtualizado = {
+                id: projetoId,
+                nomeProjeto: nomeProjeto,
+                descricaoProjeto: descricaoProjeto
+            };
+            
+            fetch(`${projetosApiUrl}/${projetoId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(projetoAtualizado)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Falha ao atualizar projeto.');
+                }
+                alert('Projeto atualizado com sucesso!');
+                carregarProjetos();
+                mainTitle.textContent = 'Selecione um Projeto';
+                mainAreaDiv.innerHTML = '';
+            })
+            .catch(error => {
+                alert('Erro: ' + error.message);
+            });
+        });
+
+        document.getElementById('btn-cancelar').addEventListener('click', () => {
+            mainTitle.textContent = 'Selecione um Projeto';
+            mainAreaDiv.innerHTML = '';
+        });
+    }
+    
+    function excluirProjeto(projetoId) {
+        if (confirm('Tem certeza que deseja excluir este projeto? Esta ação não pode ser desfeita.')) {
+            fetch(`${projetosApiUrl}/${projetoId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Falha ao excluir projeto.');
+                }
+                alert('Projeto excluído com sucesso!');
+                carregarProjetos();
+                mainTitle.textContent = 'Selecione um Projeto';
+                mainAreaDiv.innerHTML = '';
+            })
+            .catch(error => {
+                alert('Erro: ' + error.message);
+            });
+        }
+    }
+
+    function exibirDetalhesProjeto(projeto) {
+        mainTitle.textContent = projeto.nomeProjeto;
+        mainAreaDiv.innerHTML = `
+            <div class="project-details">
+                <h3>Descrição do Projeto</h3>
+                <p>${projeto.descricaoProjeto}</p>
+                <p><strong>Data de Criação:</strong> ${projeto.dataCriacao.day}/${projeto.dataCriacao.month}/${projeto.dataCriacao.year}</p>
+                <div class="tree-actions">
+                    <button class="btn-add-arvore">Adicionar Árvore</button>
+                </div>
+                <h3>Árvores Cadastradas</h3>
+                <table id="tabela-arvores">
+                    <thead>
+                        <tr>
+                            <th>Nome Popular</th>
+                            <th>Espécie</th>
+                            <th>Localização</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        `;
+        carregarArvoresDoProjeto(projeto.id);
+    }
+    
+    function carregarArvoresDoProjeto(projetoId) {
+        fetch(`${arvoresApiUrl}/${projetoId}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(arvores => {
+            const tabelaArvoresBody = document.querySelector('#tabela-arvores tbody');
+            tabelaArvoresBody.innerHTML = '';
+            if(arvores.length === 0) {
+                tabelaArvoresBody.innerHTML = '<tr><td colspan="4">Nenhuma árvore cadastrada para este projeto.</td></tr>';
+                return;
+            }
+            arvores.forEach(arvore => {
+                const row = tabelaArvoresBody.insertRow();
+                row.insertCell(0).textContent = arvore.nomePopular;
+                row.insertCell(1).textContent = arvore.nomeCientifico;
+                row.insertCell(2).textContent = arvore.localizacao;
+                const acoesCell = row.insertCell(3);
+                acoesCell.innerHTML = `
+                    <button class="btn-editar">Editar</button>
+                    <button class="btn-excluir">Excluir</button>
+                `;
+            });
+        });
+    }
+
+    // Adiciona o evento de clique no botão de "Adicionar Projeto"
+    btnAddProjeto.addEventListener('click', exibirFormularioNovoProjeto);
+
+    document.addEventListener('DOMContentLoaded', carregarProjetos);
+</script>
+</body>
+</html>

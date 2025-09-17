@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinela - Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F8F5EF;
+            color: #525252;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            display: flex;
+            width: 1000px; /* Aumentei a largura */
+            height: 600px;  /* Aumentei a altura */
+            background-color: #E6E1D9;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .info-panel {
+            flex: 1;
+            background-color: #E6E1D9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+        .info-panel .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .info-panel .logo {
+            width: 120px; /* Aumentei o tamanho da logo */
+            height: 120px;
+        }
+        .info-panel h1 {
+            font-size: 2.5em; /* Aumentei o tamanho do título */
+            margin: 10px 0;
+        }
+        .info-panel p {
+            font-size: 1em; /* Aumentei o tamanho do parágrafo */
+            color: #79716A;
+        }
+        .login-panel {
+            flex: 1;
+            background-color: #F8F5EF;
+            padding: 60px; /* Aumentei o padding */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-panel h2 {
+            font-size: 2.2em; /* Aumentei o tamanho do título */
+            margin-bottom: 40px;
+        }
+        .login-panel input {
+            width: 100%;
+            padding: 15px; /* Aumentei o padding dos campos */
+            margin-bottom: 25px;
+            border: 1px solid #C4B9AA;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1.1em; /* Aumentei o tamanho da fonte dos campos */
+        }
+        .login-panel button {
+            width: 100%;
+            padding: 15px; /* Aumentei o padding do botão */
+            background-color: #93A086;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em; /* Aumentei o tamanho da fonte do botão */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .login-panel button:hover {
+            background-color: #79856F;
+        }
+        .login-panel .social-links {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .login-panel .social-links a {
+            margin: 0 10px;
+            font-size: 1.5em;
+            color: #525252;
+            text-decoration: none;
+        }
+        .login-panel .link-cadastre-se {
+            margin-top: 25px;
+            font-size: 1em;
+            color: #525252;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .login-panel .link-cadastre-se:hover {
+            color: #79856F;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="info-panel">
+        <div class="logo-container">
+            <img src="logo-sentinela.png" alt="Logo Sentinela" class="logo">
+            <h1>SENTINELA</h1>
+        </div>
+        <p>O SISTEMA DE MONITORAMENTO MAIS EFICIENTE DO MERCADO</p>
+    </div>
+    <div class="login-panel">
+        <h2>Login</h2>
+        <form id="login-form">
+            <input type="email" id="email" placeholder="Email:" required>
+            <input type="password" id="senha" placeholder="Senha:" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <a href="cadastro.html" class="link-cadastre-se">Cadastre-se</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
+
+        const loginData = {
+            emailPrincipal: email,
+            senha: senha
+        };
+
+        fetch('http://localhost:8081/ArborismoBackend/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                // Se a resposta não for OK, trata o erro
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || 'Erro desconhecido.');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message); // Exibe a mensagem de sucesso
+            if (data.success) {
+                // Salva o token e o ID da empresa no localStorage para uso futuro
+                localStorage.setItem('auth-token', data.token);
+                localStorage.setItem('empresaId', data.empresaId);
+                // Redireciona para a página principal da aplicação
+                window.location.href = 'projetos.html';
+            }
+        })
+        .catch(error => {
+            alert('Falha no login: ' + error.message);
+        });
+    });
+</script>
+
+</body>
+</html>

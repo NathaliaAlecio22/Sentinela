@@ -4,9 +4,8 @@ import java.time.LocalDate;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 public class Arvore {
-	private int id;
+    private int id;
     private int projetoId;
     private String codigoQr;
     private String nomePopular;
@@ -34,13 +33,16 @@ public class Arvore {
     private String situacaoRecomendada;
     private LocalDate proximaInspecao;
     
+    // --- Campo adicionado para o histórico de manutenções ---
+    private List<Manutencao> historicoManutencoes;
+
     // Construtor padrão (vazio)
     public Arvore() {
-    	
     }
     
-    public Arvore(int id, int projetoId, String codigoQr, String nomePopular, String nomeCientifico, String numeroPlaqueta, String localizacao, BigDecimal alturaM, BigDecimal dapCm, int idadeEstimada, String inclinacaoTronco, boolean raizesExpostas, String formaCopa, String pragasDoencas, String ocoTronco, String rachadurasFissuras, String riscoGalhos, LocalDate dataUltimaPoda, String tipoUltimaPoda, String historicoQuedas, String proximidadeRisco, String avaliacaoRisco, LocalDate dataInspecao, String responsavelInspecao, String observacoesAdicionais, String situacaoRecomendada, LocalDate proximaInspecao) {
-    	this.id = id;
+    // Construtor completo (opcional)
+    public Arvore(int id, int projetoId, String codigoQr, String nomePopular, String nomeCientifico, String numeroPlaqueta, String localizacao, BigDecimal alturaM, BigDecimal dapCm, int idadeEstimada, String inclinacaoTronco, boolean raizesExpostas, String formaCopa, String pragasDoencas, String ocoTronco, String rachadurasFissuras, String riscoGalhos, LocalDate dataUltimaPoda, String tipoUltimaPoda, String historicoQuedas, String proximidadeRisco, String avaliacaoRisco, LocalDate dataInspecao, String responsavelInspecao, String observacoesAdicionais, String situacaoRecomendada, LocalDate proximaInspecao, List<Manutencao> historicoManutencoes) {
+        this.id = id;
         this.projetoId = projetoId;
         this.codigoQr = codigoQr;
         this.nomePopular = nomePopular;
@@ -67,10 +69,11 @@ public class Arvore {
         this.observacoesAdicionais = observacoesAdicionais;
         this.situacaoRecomendada = situacaoRecomendada;
         this.proximaInspecao = proximaInspecao;
-    	
+        this.historicoManutencoes = historicoManutencoes;
     }
-    
-    // --- Getters e Setters
+
+    // --- Getters e Setters (pode gerar no Eclipse com Alt + Shift + S) ---
+    // Adicione os getters e setters para todos os campos
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getProjetoId() { return projetoId; }
@@ -125,16 +128,8 @@ public class Arvore {
     public void setSituacaoRecomendada(String situacaoRecomendada) { this.situacaoRecomendada = situacaoRecomendada; }
     public LocalDate getProximaInspecao() { return proximaInspecao; }
     public void setProximaInspecao(LocalDate proximaInspecao) { this.proximaInspecao = proximaInspecao; }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
+    // --- Getter e Setter para a nova lista de manutenções ---
+    public List<Manutencao> getHistoricoManutencoes() { return historicoManutencoes; }
+    public void setHistoricoManutencoes(List<Manutencao> historicoManutencoes) { this.historicoManutencoes = historicoManutencoes; }
 }

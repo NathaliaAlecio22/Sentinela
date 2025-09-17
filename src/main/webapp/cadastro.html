@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinela - Cadastro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #F8F5EF;
+            color: #525252;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #E6E1D9;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .form-group {
+            flex: 1 1 calc(50% - 20px);
+            display: flex;
+            flex-direction: column;
+        }
+        .full-width {
+            flex: 1 1 100%;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #C4B9AA;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #93A086;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Cadastro da Empresa</h1>
+    <form id="cadastro-form">
+        <div class="form-group full-width">
+            <label for="razaoSocial">Razão Social:</label>
+            <input type="text" id="razaoSocial" name="razaoSocial" required>
+        </div>
+        <div class="form-group full-width">
+            <label for="nomeFantasia">Nome Fantasia:</label>
+            <input type="text" id="nomeFantasia" name="nomeFantasia" required>
+        </div>
+        <div class="form-group">
+            <label for="cnpj">CNPJ:</label>
+            <input type="text" id="cnpj" name="cnpj" required>
+        </div>
+        <div class="form-group">
+            <label for="inscricaoEstadual">Inscrição Estadual/Municipal:</label>
+            <input type="text" id="inscricaoEstadual" name="inscricaoEstadual">
+        </div>
+        <div class="form-group full-width">
+            <label for="ramoAtividade">Ramo de Atividade:</label>
+            <select id="ramoAtividade" name="ramoAtividade" required>
+                <option value="Servicos Ambientais">Serviços Ambientais</option>
+                <option value="Jardinagem/Paisagismo">Jardinagem/Paisagismo</option>
+                <option value="Engenharia Florestal">Engenharia Florestal</option>
+                <option value="Outro">Outro</option>
+            </select>
+        </div>
+
+        <div class="form-group full-width">
+            <label for="logradouro">Endereço:</label>
+            <input type="text" id="logradouro" name="logradouro" placeholder="Rua/Avenida" required>
+        </div>
+        <div class="form-group">
+            <label for="numero">Número:</label>
+            <input type="text" id="numero" name="numero" required>
+        </div>
+        <div class="form-group">
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" name="cidade" required>
+        </div>
+        <div class="form-group">
+            <label for="estado">Estado:</label>
+            <input type="text" id="estado" name="estado" required>
+        </div>
+        <div class="form-group">
+            <label for="cep">CEP:</label>
+            <input type="text" id="cep" name="cep" required>
+        </div>
+
+        <div class="form-group">
+            <label for="telefone">Telefone:</label>
+            <input type="tel" id="telefone" name="telefone">
+        </div>
+        <div class="form-group">
+            <label for="celular">Celular:</label>
+            <input type="tel" id="celular" name="celular" required>
+        </div>
+        <div class="form-group full-width">
+            <label for="emailPrincipal">E-mail Principal (Login):</label>
+            <input type="email" id="emailPrincipal" name="emailPrincipal" required>
+        </div>
+        <div class="form-group full-width">
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required>
+        </div>
+
+        <div class="form-group full-width">
+            <button type="submit">Cadastrar Empresa</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('cadastro-form');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const empresa = {
+            razaoSocial: document.getElementById('razaoSocial').value,
+            nomeFantasia: document.getElementById('nomeFantasia').value,
+            cnpj: document.getElementById('cnpj').value,
+            inscricaoEstadual: document.getElementById('inscricaoEstadual').value,
+            ramoAtividade: document.getElementById('ramoAtividade').value,
+            logradouro: document.getElementById('logradouro').value,
+            numero: document.getElementById('numero').value,
+            cidade: document.getElementById('cidade').value,
+            estado: document.getElementById('estado').value,
+            cep: document.getElementById('cep').value,
+            telefone: document.getElementById('telefone').value,
+            celular: document.getElementById('celular').value,
+            emailPrincipal: document.getElementById('emailPrincipal').value,
+            senha: document.getElementById('senha').value
+            // Outros campos podem ser adicionados aqui
+        };
+
+        fetch('http://localhost:8081/ArborismoBackend/api/auth/cadastrar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(empresa),
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            if (data.message.includes('sucesso')) {
+                window.location.href = 'index.html';
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Ocorreu um erro no cadastro. Tente novamente.');
+        });
+    });
+</script>
+</body>
+<div style="text-align: center; margin-bottom: 30px;">
+    <img src="logo-sentinela.png" alt="Logo Sentinela" style="width: 80px; height: 80px;">
+</div>
+</html>
